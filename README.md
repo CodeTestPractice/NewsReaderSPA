@@ -10,17 +10,22 @@ Stream of news feed is fetched in live without refreshing the page or any Ajax c
 are added to the list on-the-fly the latest news will be added to the table in Descending order,
 (being the latest news to the top of the list).
 
-Given the limited time available for this project, I have left "Todo" tags which
- can be extracted and completed at later time.
+Given the limited time available for this project, "Todo" tags are placed which can be extracted 
+and completed at later time.
 `Visual Studio` > `View menu` > `Task List`
 
 ### Roadmap:
 
 A) Single Page with fixed static RSS Url
+
 B) User would be able to set/save the desired URL 
+
 C) Read all RSS/Atom version
+
 D) Push notification to user's browser with WebPush method upon receiving new item
+
 F) Prefetch render news to the client's browser
+
 G) Resource Management would clear RSS Client
 
 ## Back-end:
@@ -30,6 +35,11 @@ that downloads the RSS/Atom  feed on interval, given RSS runs on Web
 Http technology it doesn't have push notifications. therefore the web client
 must download the feed on interval and store the feed locally.
 
+Upon loading application in server it will initialize latest news from feed URL, it will
+then download the feed and iterate through items and check for new feed.
+
+It will only begin iteration when `Feed`.`lastBuildDate` is greater than `LocalStorage`.`lastBuildDate`
+
 `Start()`
 	Runs with Async/Await to a parallel thread and reads the RSS feed URL
 	sleeps for an interval of X seconds, here we assume 30 seconds as static value,
@@ -37,13 +47,17 @@ must download the feed on interval and store the feed locally.
 	and will issue 
 
 `StartInterval()` : called by Start to open a child thread to ensure Async criteria is met.
-`NewsFeed`: array of NewsItem object.
+
+`NewsFeed`: Local storage of news item that is an array of NewsItem object.
+
 `_interval`: in seconds (Sleep time between each WebGet call).
+
 `_URL`: Sleep time between each WebGet call in second.
-`_lastPublishDate`: Use this as identifier of new items in feed. 
+
 
 Challenge: Most Newsfeed are not in order of published but rather in order 
-of appearence at homePage, so latest news is not necessary the last item in news, therefore in NewsFeed.AddItem() we change the order to our desire.
+of appearence at homePage, so latest news is not necessary the last item in news,
+therefore in NewsFeed.AddItem() we change the order to our desire.
 
 `ResourceManagement`:
 Service should stop as soon as no user is connected to web service,
@@ -53,16 +67,27 @@ and service will start again when there is a Socket open.
 	
 
 ### NewsFeed (Model)
-Feed is a object that feeds the data to the based on Push notification to user-agents
+NewsFeed is a object that feeds the data to the based on Push notification to user-agents
 Users are tapping to to RSS or Atom Feed model based on Websocket Technology. 
-the benefit is that it consume less resources, it is faster and any news object that arrives to the feed is 
-pushed/broadcast to all useragent that are listening the URL.
+the benefit is that it consume less resources, it is faster and any news object that arrives 
+to the feed is pushed/broadcast to all useragent that are listening the URL.
 
-	Channel.title
-	Channel.description
-	Channel.link
-	Channel.lastBuildDate
-	Channel.pubDate
+```
+public class NewsFeed {
+    public static List<NewsItem> ListNewsItems = new List<NewsItem>();
+
+	// NewsFeed general parameters
+	public string Title;
+	public string Description;
+	public string Link;
+	public string LastBuildDate;
+	public string pubDate;
+	
+	...
+	...
+}
+```
+
 
 `Feed`
 
@@ -104,7 +129,7 @@ ws://URL/feed
 - Bootstrap
 - jQuery
 - DataTables
-- SignalR (WebSocket)
+- WebSocket
 
 
 ### Workflow:

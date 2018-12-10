@@ -22,14 +22,12 @@ namespace NewsReaderSPA.Provider
         public static NewsFeed newsFeed;    // NewsFeed
         public static int _interval;        // Sleep time between each WebGet call in second
         private static string _URL;
-        private DateTime _lastPublishDate;
         
         public NewsClient(string URL, int interval)
         {
             // Assign local variables
             _interval = interval;
             _URL = URL;
-            _lastPublishDate = new DateTime();
             newsFeed = new NewsFeed();
 
             // It is mandatory to preload the instance of NewsClient
@@ -77,12 +75,12 @@ namespace NewsReaderSPA.Provider
                 var feedResult = feedReader.Result;
 
                 // If there are more than one Item in the result and the items are newer than last check 
-                if (feedResult.Items.Count() > 0 && feedResult.LastUpdatedDate > _lastPublishDate)
+                if (feedResult.Items.Count() > 0 && feedResult.LastUpdatedDate > newsFeed.LastBuildDate)
                 {
                     foreach (FeedItem feedItem in feedResult.Items)
                     {
                         // Only add items that are newer last Publishdate
-                        if (feedItem.PublishingDate > _lastPublishDate)
+                        if (feedItem.PublishingDate > newsFeed.LastBuildDate)
                         {
                             NewsItem newsItem = new NewsItem
                             {
@@ -98,7 +96,7 @@ namespace NewsReaderSPA.Provider
 
                     }
                     // Reset LastPublishdate
-                    _lastPublishDate = (DateTime) feedResult.LastUpdatedDate;
+                    newsFeed.LastBuildDate = (DateTime) feedResult.LastUpdatedDate;
                 }
             }
             catch (Exception ex)

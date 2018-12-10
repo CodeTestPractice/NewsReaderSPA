@@ -9,6 +9,13 @@ namespace NewsReaderSPA.Models
     {
         public static List<NewsItem> ListNewsItems = new List<NewsItem>();
 
+        // NewsFeed general parameters
+        public string Title;
+        public string Description;
+        public string Link;
+        public DateTime LastBuildDate;
+        public string pubDate;
+
         public NewsFeed()
         {
             //ListNewsItems = new List<NewsItem>();
