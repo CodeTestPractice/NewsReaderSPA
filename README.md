@@ -1,8 +1,8 @@
 
 # News Reader SPA
 
-News Reader is a single page application that reads news feed and display using realtime protocol 
-and display the latest news to the user.
+News Reader is a single page application that reads news feed and display to user in a table, data feed is updated live using realtime protocol, this means the user will not reload the page, advantage of RealTime WebSocket over Ajax or RESTapi is that all users will receive the new instantly without making 
+costly and slow API calls to backend.
 
 Stream of news feed is fetched in live without refreshing the page or any Ajax call, the items 
 are added to the list on-the-fly the latest news will be added to the table in Descending order,
