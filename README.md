@@ -1,13 +1,18 @@
 
 # News Reader SPA
 
-News Reader is a single page application that reads news feed and display to user in a table, data feed is updated live using realtime protocol, this means the user will not reload the page, advantage of RealTime WebSocket over Ajax or RESTapi is that all users will receive the new instantly without making 
-costly and slow API calls to backend.
+News Reader is a single page application that reads news feed and display to user in a table,
+data feed is updated live using realtime protocol, this means the user will not reload the page, 
+advantage of RealTime WebSocket over Ajax or RESTapi is that all users will receive the new 
+instantly without making costly and slow API calls to backend.
 
 Stream of news feed is fetched in live without refreshing the page or any Ajax call, the items 
 are added to the list on-the-fly the latest news will be added to the table in Descending order,
 (being the latest news to the top of the list).
 
+Given the limited time available for this project, I have left "Todo" tags which
+ can be extracted and completed at later time.
+`Visual Studio` > `View menu` > `Task List`
 
 ### Roadmap:
 
@@ -20,7 +25,7 @@ G) Resource Management would clear RSS Client
 
 ## Back-end:
 
-### SyndicateClient (Provider) 
+### NewsClient (Background Service) 
 that downloads the RSS/Atom  feed on interval, given RSS runs on Web 
 Http technology it doesn't have push notifications. therefore the web client
 must download the feed on interval and store the feed locally.
@@ -28,8 +33,17 @@ must download the feed on interval and store the feed locally.
 `Start()`
 	Runs with Async/Await to a parallel thread and reads the RSS feed URL
 	sleeps for an interval of X seconds, here we assume 30 seconds as static value,
-	this may be adjusted further
+	this may be adjusted further. it will instantiate a single instance of `NewsFeed` model 
+	and will issue 
 
+`StartInterval()` : called by Start to open a child thread to ensure Async criteria is met.
+`NewsFeed`: array of NewsItem object.
+`_interval`: in seconds (Sleep time between each WebGet call).
+`_URL`: Sleep time between each WebGet call in second.
+`_lastPublishDate`: Use this as identifier of new items in feed. 
+
+Challenge: Most Newsfeed are not in order of published but rather in order 
+of appearence at homePage, so latest news is not necessary the last item in news, therefore in NewsFeed.AddItem() we change the order to our desire.
 
 `ResourceManagement`:
 Service should stop as soon as no user is connected to web service,
@@ -50,6 +64,7 @@ pushed/broadcast to all useragent that are listening the URL.
 	Channel.lastBuildDate
 	Channel.pubDate
 
+`Feed`
 
 #### `AddItems(RSSItem item)`: 
 1. First it will sort the Object Items based on the PublicationDate in Ascending order (Oldest first and newest last)
@@ -59,21 +74,26 @@ pushed/broadcast to all useragent that are listening the URL.
 #### `LatestPublicationDate`:
 Publication date of latest item in the local storage
 
-## News Item (Object):
+### NewsItem (Object):
 RSS Object that consists of below params:
-1) GUID 
-2) Title
-3) Description
-4) Link RSS,Atom : link
-5) PublicationDate
-
+```
+namespace NewsReaderSPA.Models{
+    public class NewsItem{
+        public static string GUID;
+        public static string Title;
+        public static string Description;
+        public static string Link;
+        public static DateTime PublicationDate;
+    }
+}
+```
 
 Further: https://en.wikipedia.org/wiki/RSS
 
 ## Websocket Controller:
 1) Will open `ws://URL/feed` for useragent to subscribe
 2) At `OnOpen()` event it will feed the subscriber with data
-3) `NewItem` Event would assiociate with 
+3) `Broadcast(News news)` would broadcast a news item to all useragents
 
 ## Front-end:
 
@@ -84,7 +104,7 @@ ws://URL/feed
 - Bootstrap
 - jQuery
 - DataTables
-- WebSocket
+- SignalR (WebSocket)
 
 
 ### Workflow:
