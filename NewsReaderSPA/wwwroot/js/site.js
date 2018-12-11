@@ -4,7 +4,7 @@
 function Connect() {
 
     // create WebSocket URI address
-    var uri = "ws://localhost:57293/feed";
+    var uri = "ws://newsreader.gpn.mx/feed";
 
     // instantiate a WebSocket object and set handle
     WebSocketHandle = new WebSocket(uri);
