@@ -116,9 +116,13 @@ namespace NewsReaderSPA.Models{
 Further: https://en.wikipedia.org/wiki/RSS
 
 ## Websocket Controller:
+Sends initial data to Subscriber and receive callback from `NewsClient` each time there is a new `NewsItem` received from URL
 1) Will open `ws://URL/feed` for useragent to subscribe
 2) At `OnOpen()` event it will feed the subscriber with data
-3) `Broadcast(News news)` would broadcast a news item to all useragents
+3) `SendAsync()` uses the method to send initial data to new subscriber
+4) `SendAll(List<NewsItem> newsItem)` would broadcast a news item to all useragents
+`WebSocketUserList` Manage WebSocket subscriber in `List<WebSocket>`
+`_newsClient` access to static `NewsFeed`
 
 ## Front-end:
 

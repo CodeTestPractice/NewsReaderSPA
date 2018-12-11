@@ -33,3 +33,9 @@
         display: none;
     }
 }
+
+#messageArea {
+    background-color: lightgrey;
+    overflow-y: scroll;
+    height: 150px; /*calc( 100vh - 196px);*/
+}
