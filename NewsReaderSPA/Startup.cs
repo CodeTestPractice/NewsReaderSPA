@@ -40,12 +40,12 @@ namespace NewsReaderSPA
             }
 
             // Todo: URL is hard coded it should be be placed in app
-            //var NewsClient = new NewsClient("http://nu.nl/rss/Algemeen", 2);
+            var NewsClient = new NewsClient("http://nu.nl/rss/Algemeen", 30);
 
             // Todo: Test URL must be moved to appsetting.Development.json
             // we will have control over the test URL to add new items and test the background
             // service.
-            var NewsClient = new NewsClient("https://tmp.hashpanel.com/feed/", 10);
+            //var NewsClient = new NewsClient("https://tmp.hashpanel.com/feed/", 3);
             NewsClient.Start();
 
             // Add WebSockets to project

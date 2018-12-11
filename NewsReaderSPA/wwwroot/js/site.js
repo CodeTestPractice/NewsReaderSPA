@@ -26,7 +26,7 @@ function Connect() {
         console.log("Disconnected from : " + DataObject.currentTarget.url );
     }
 
-    // (OnMessage) Upon receiving Message add latest news item to top of the list.
+    // (OnMessage) Upon receiving NewsItem and add latest news item to top of the list.
      WebSocketHandle.onmessage = function (DataObject) {
         // Get MessageArea DOM div object
          var NewsTable = $('#NewsTable').DataTable();
