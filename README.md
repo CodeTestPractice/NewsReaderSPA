@@ -30,6 +30,26 @@ sed -i "s/ws:\/\/localhost\:57293/ws\:\/\/newsreader.gpn.mx/g" wwwroot/js/site.j
 docker build -t newsreader .
 docker run -d -p 5000:80 --name newsreader newsreader
 ```
+
+When behind Apache set below directive:
+```
+ProxyPass / http://127.0.0.1:5000/
+ProxyPassReverse / http://127.0.0.1:5000/
+
+ProxyPass /feed/ ws://127.0.0.1:5000/feed/  retry=0
+ProxyPassReverse /feed/ ws://127.0.0.1:5000/feed/  retry=0
+
+# Set the response header to the captured value if there was a match
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# This section is important to be enclosed with Location/xml and double quote
+<Location "/feed">
+    ProxyPass "ws://127.0.0.1:5000/feed"
+</Location>
+```
+
 ### Roadmap:
 
 A) Single Page with fixed static RSS Url
