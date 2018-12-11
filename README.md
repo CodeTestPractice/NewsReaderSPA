@@ -151,7 +151,7 @@ namespace NewsReaderSPA.Models{
 
 Further: https://en.wikipedia.org/wiki/RSS
 
-## Websocket Controller:
+### Websocket (ontroller):
 Sends initial data to Subscriber and receive callback from `NewsClient` each time there is a new `NewsItem` received from URL
 1) Will open `ws://URL/feed` for useragent to subscribe
 2) At `OnOpen()` event it will feed the subscriber with data
