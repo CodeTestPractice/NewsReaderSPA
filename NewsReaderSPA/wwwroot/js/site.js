@@ -27,59 +27,23 @@ function Connect() {
     }
 
     // (OnMessage) Upon receiving NewsItem and add latest news item to top of the list.
-     WebSocketHandle.onmessage = function (DataObject) {
+    WebSocketHandle.onmessage = function (DataObject) {
         // Get MessageArea DOM div object
-         var NewsTable = $('#NewsTable').DataTable();
+        var NewsTable = $('#NewsTable').DataTable();
 
         var message = JSON.parse(DataObject.data);
     
         // Get and append data from WebSocketHandle
-         message.forEach(function (item) {
-             var NewsTable = $('#NewsTable').DataTable();;
-             NewsTable.row.add([item.Title,
-             item.Description,
-             "<a href='"+item.Link+"'>Link</a>",
-             item.PublicationDate,
-             item.GUID
-             ]).draw(false);;
-         });
-        
+        message.forEach(function (item) {
+            var NewsTable = $('#NewsTable').DataTable();;
+            NewsTable.row.add([item.Title,
+            item.Description,
+            "<a href='"+item.Link+"'>Link</a>",
+            item.PublicationDate,
+            item.GUID
+            ]).draw(false);;
+        });
     }
-}
-
-// Send message to WebSocket connection
-function SendMessage() {
-    // Get user's message from DOM object
-    var txtMessage = document.getElementById("txtMessageOut");
-
-    // Get receiver's name from DOM object
-    var txtReceiver = document.getElementById("txtReceiver");
-
-    // Send Message through Websocket
-    WebSocketHandle.send(JSON.stringify({   // Encode JSON object from on-the-fly 
-        Receiver: txtReceiver.value,
-        Message: txtMessage.value
-    })
-    );
-
-    // Get MessageArea DOM div object
-    var messageArea = document.getElementById("messageArea");
-
-    // Append outgoign message to messageArea
-    messageArea.innerHTML += "\nYou: " + txtMessage.value;
-}
-
-// Close WebSocket connection
-function Disconnect() {
-    // Disconnect/Close WebSocket Connection
-    WebSocketHandle.close(1000, "Disconnect from WebSocket");
-
-    // Get MessageArea DOM div object
-    var messageArea = document.getElementById("messageArea");
-
-    // Append outgoign message to messageArea
-    messageArea.innerHTML += "\nDisconnected from " + WebSocketHandle.url;
-
 }
 
 
