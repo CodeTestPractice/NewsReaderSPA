@@ -14,11 +14,16 @@ Given the limited time available for this project, "Todo" tags are placed which 
 and completed at later time.
 `Visual Studio` > `View menu` > `Task List`
 
+Demo is available at below link:
+[http://newsreader.gpn.mx/](http://newsreader.gpn.mx/)
 
 ### Run with Docker:
 Use the following commands to build and run your Docker image with bash  
 
 ```
+./rebuild.sh
+
+# or just run below for detail:
 docker stop newsreader
 docker rm newsreader
 sed -i "s/ws:\/\/localhost\:57293/ws\:\/\/newsreader.gpn.mx/g" wwwroot/js/site.js
