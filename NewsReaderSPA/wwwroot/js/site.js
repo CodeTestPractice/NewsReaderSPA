@@ -53,6 +53,13 @@ $(document).ready(function () {
     var t = $('#NewsTable').DataTable({
         "iDisplayLength": 5,
         "lengthMenu": [1, 3, 5, 10, 25, 50, 75, 100],
-        "ordering": false
+        "ordering": false,
+        "columns": [
+            { "width": "30%" },
+            { "width": "40%" },
+            { "width": "50px" },
+            { "width": "150px" },
+            { "width": "100px" }
+        ]
     });
 });
