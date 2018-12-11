@@ -14,6 +14,14 @@ Given the limited time available for this project, "Todo" tags are placed which 
 and completed at later time.
 `Visual Studio` > `View menu` > `Task List`
 
+
+### Run with Docker:
+Use the following commands to build and run your Docker image with bash  
+
+```
+$ docker build -t newsreader .  
+$ docker run -d -p 5000:80 --name newsreader newsreader  
+```
 ### Roadmap:
 
 A) Single Page with fixed static RSS Url
