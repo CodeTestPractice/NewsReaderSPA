@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NewsReaderSPA.Models
 {
     public class NewsFeed
     {
-        public static List<NewsItem> ListNewsItems = new List<NewsItem>();
+        public static List<NewsItem> ListNewsItems { get; set; } = new List<NewsItem>();
 
         // NewsFeed general parameters
         public string Title;
@@ -36,6 +35,11 @@ namespace NewsReaderSPA.Models
                 ListNewsItems.Add(newsItem);
             }
             
+        }
+        
+        public List<NewsItem> getListNewsItems()
+        {
+            return ListNewsItems;
         }
 
     }

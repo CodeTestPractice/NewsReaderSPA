@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NewsReaderSPA.Provider;
+using NewsReaderSPA.WebSocketConf;
 
 namespace NewsReaderSPA
 {
@@ -44,8 +45,38 @@ namespace NewsReaderSPA
             // Todo: Test URL must be moved to appsetting.Development.json
             // we will have control over the test URL to add new items and test the background
             // service.
-            var NewsClient = new NewsClient("https://tmp.hashpanel.com/feed/", 2);
+            var NewsClient = new NewsClient("https://tmp.hashpanel.com/feed/", 10);
             NewsClient.Start();
+
+            // Add WebSockets to project
+            app.UseWebSockets(wsConfig.GetOptions());
+
+            // WebSocket routings
+            app.Use(async (context, next) =>
+            {
+                // If this is request to initial WebSocket connection
+                if (context.WebSockets.IsWebSocketRequest)
+                {
+
+                    // Todo : Provisiniong of context must be done in WebSocketController
+                    // Match the context URL on WebSocket 
+                    // This is similar to routing with Web Http Request
+                    // Todo : Context Path must be in appsettings.json
+                    if (context.Request.Path == "/feed")
+                    {
+
+                        WebSocketController wsc = new WebSocketController(NewsClient);
+                        await wsc.ListenAcceptAsync(context);
+
+                    }
+                }
+                else
+                {
+                    // Else if request is not connection establishment
+                    await next();
+
+                }
+            });
 
             // set Index.html as default page
             DefaultFilesOptions options = new DefaultFilesOptions();

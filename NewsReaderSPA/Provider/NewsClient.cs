@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsReaderSPA.Models;
 using CodeHollow.FeedReader;
 using System.Threading;
-
+using System.Collections.Generic;
+using NewsReaderSPA.WebSocketConf;
 /* 
  * RSSClient is a provider that 
  * fetches RSS feed from a URL
@@ -19,23 +19,25 @@ namespace NewsReaderSPA.Provider
 {
     public class NewsClient
     {
-        public static NewsFeed newsFeed;    // NewsFeed
+        public static NewsFeed newsFeed { get; set; }    // NewsFeed
         public static int _interval;        // Sleep time between each WebGet call in second
         private static string _URL;
         
-        public NewsClient(string URL, int interval)
+        public NewsClient(string URL = "" , int interval = 0)
         {
-            // Assign local variables
-            _interval = interval;
-            _URL = URL;
-            newsFeed = new NewsFeed();
+            if(URL != "") { 
+                // Assign local variables
+                _interval = interval;
+                _URL = URL;
+                newsFeed = new NewsFeed();
+        
+                // It is mandatory to preload the instance of NewsClient
+                // A) It will ensure the URL is valid and contains a valid NewsFeed
+                // B) We will use the data to preload our WebSocket instance so Immediately after launch
+                //      websocket can receive subscriptions.
 
-            // It is mandatory to preload the instance of NewsClient
-            // A) It will ensure the URL is valid and contains a valid NewsFeed
-            // B) We will use the data to preload our WebSocket instance so Immediately after launch
-            //      websocket can receive subscriptions.
-
-            FetchData();
+                FetchData();
+            }
         }
 
         public async void Start()
@@ -91,7 +93,16 @@ namespace NewsReaderSPA.Provider
                                 PublicationDate = (DateTime)feedItem.PublishingDate
                             };
 
+                            // Save item in List array
                             newsFeed.AddItem(newsItem);
+
+                            // SendAll websocket clients
+                            var listNewsItem = new List<NewsItem>();
+                            listNewsItem.Add(newsItem);
+
+                            // Send new item to client
+                            // Todo: Clean up syntax
+                            await new WebSocketController(new NewsClient()).SendAll(listNewsItem);
                         }
 
                     }
